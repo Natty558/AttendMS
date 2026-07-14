@@ -293,7 +293,6 @@ tbody tr:hover { background: var(--surface-2); }
 .assign-row { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border); gap: 0.75rem; }
 .assign-row:last-child { border-bottom: none; }
 .assign-row:hover { background: var(--surface-2); }
-.assign-checkbox { width: 20px; height: 20px; cursor: pointer; accent-color: var(--primary); }
 .assign-student-info { display: flex; align-items: center; gap: 0.6rem; flex: 1; min-width: 0; }
 .assign-student-info p { font-weight: 600; font-size: 0.86rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .assign-student-info span { font-size: 0.74rem; color: var(--text-3); white-space: nowrap; }

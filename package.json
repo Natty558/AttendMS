@@ -1,7 +1,7 @@
 {
   "name": "student-attendance-system",
-  "version": "4.1.0",
-  "description": "Student Attendance Management System - pure HTML/CSS/JS with localStorage",
+  "version": "4.2.0",
+  "description": "Student Attendance Management System - modular HTML/CSS/JS with localStorage",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
