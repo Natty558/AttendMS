@@ -2,7 +2,7 @@
 
 import { state } from "./state.js";
 import { IMG, SVG, icon } from "./icons.js";
-import { esc, cap, toast, handleImageUpload, avatarPlaceholderHTML } from "./utils.js";
+import { esc, cap, toast, handleImageUpload, avatarPlaceholderHTML, fmtDate, todayISO } from "./utils.js";
 import {
   findStudent, findClass, addStudent, updateStudent, deleteStudent,
   isIndexNumberUnique, attendanceSummary, attendanceStreak, studentRecords,
@@ -10,7 +10,6 @@ import {
 } from "./data.js";
 import { render } from "./nav.js";
 import { setTopbar, studentAvatarHTML, emptyState } from "./views-layout.js";
-import { fmtDate, todayISO } from "./utils.js";
 
 export function renderStudents() {
   if (state.profileId) return renderStudentProfile(state.profileId);

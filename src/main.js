@@ -4,7 +4,7 @@ import { state, applyTheme } from "./state.js";
 import { isLoggedIn } from "./auth.js";
 import { setRender } from "./nav.js";
 import { renderAuth } from "./views-auth.js";
-import { renderLayout, attachNavHandlers, setTopbar } from "./views-layout.js";
+import { renderLayout, attachNavHandlers } from "./views-layout.js";
 import { renderDashboard } from "./views-dashboard.js";
 import { renderStudents } from "./views-students.js";
 import { renderAttendance } from "./views-attendance.js";
@@ -42,7 +42,6 @@ function renderView() {
   else if (v === "settings") c.appendChild(renderSettings());
 }
 
-// Register the render function so other modules can trigger re-renders
 setRender(render);
 
 applyTheme();

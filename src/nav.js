@@ -1,5 +1,4 @@
 // nav.js — shared navigation/render function to avoid circular imports
-// main.js sets `render` here so other modules can trigger re-renders without importing main.js
 
 import { state } from "./state.js";
 
