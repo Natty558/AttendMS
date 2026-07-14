@@ -1,297 +1,203 @@
-# Student Attendance Management System
+# AttendMS — Student Attendance Management System
 
-A web-based Student Attendance Management System built with **pure HTML, CSS, and JavaScript** — no frameworks, no libraries, no backend server. All icons are professional inline SVG. All data is stored in the browser using `localStorage`.
-
-## Table of Contents
-
-1. [Overview](#overview)
-2. [Features](#features)
-3. [Technology Stack](#technology-stack)
-4. [Project Structure](#project-structure)
-5. [Getting Started](#getting-started)
-6. [Usage Guide](#usage-guide)
-7. [Data Model](#data-model)
-8. [System Design](#system-design)
-9. [Limitations](#limitations)
-10. [Future Enhancements](#future-enhancements)
-
----
-
-## Overview
-
-This project automates the process of recording, storing, and managing student attendance records for educational institutions. It replaces manual paper-based attendance registers with a digital system that improves accuracy, saves time, and enables quick report generation.
-
----
+A web-based attendance management system designed for lecturers to track student attendance, manage classes, and generate reports. Built with pure HTML, CSS, and JavaScript using a modular ES6 architecture. Data persists locally in the browser via localStorage.
 
 ## Features
 
-### Professional SVG Icon System
-- All icons are hand-crafted inline SVG (Feather/Lucide-style stroke icons)
-- No emojis used anywhere in the application
-- Custom gradient logo (graduation cap with academic pillars)
-- Icons scale crisply at any size and inherit color from context
-
 ### Authentication
-- Lecturer login portal with email and password
-- Session persistence across page reloads
-- Sign-out functionality
-
-### Lecturer Profile
-- **Profile picture upload** — Upload a photo (JPG/PNG, max 500KB) stored as base64
-- Edit full name, email, and phone number
-- Profile displayed in sidebar with photo
-- Click sidebar user info to jump to profile page
+- **Register** — Create a lecturer account with name, email, and password
+- **Login** — Secure sign-in with email and password
+- **Forgot Password** — Reset password using registered email
+- **Change Password** — Update password from Settings (requires current password)
+- Password strength indicator during registration and reset
+- Show/hide password toggles on all password fields
 
 ### Dashboard
-- Real-time statistics with SVG icons: total students, present today, absent today, overall rate
+- Overview stats: total students, present/absent today, overall attendance rate
 - Today's attendance snapshot with progress bar
-- Overall distribution donut chart (SVG)
-- At-risk student alert banner with warning icon
-- Recently registered students with clickable rows
+- Overall attendance distribution donut chart (present/absent/late)
+- At-risk student alert banner (links to At-Risk view)
+- Recent students table (last 5 added)
 
-### Student Management
-- Register students with name, matric, course, level, email, phone, and photo
-- **Student photo upload** — Profile photo for each student
-- Edit, delete, search by name/matric/course
-- Per-student attendance rate with color-coded progress bars
-- **Attendance streaks** — Flame SVG icon badge for 3+ consecutive present days
-- Click any row for full profile view
-- Export to CSV (includes streak data)
+### Students
+- **Add/Edit Student** — Name, Index Number, Course, Level, Email, Phone, Photo
+- **Index Number Uniqueness** — Prevents duplicate index numbers (case-insensitive check)
+- **Student Profile** — Full attendance history, stats (present/absent/late/total), attendance streak badge
+- **Search** — Filter by name, index number, or course
+- **Export CSV** — Download all students with attendance stats
+- **Delete** — Removes student and all their attendance records
+- **Photo Upload** — Student avatar photos (max 500KB, JPG/PNG)
 
-### Student Profile
-- Full profile with photo, contact details (with mail/phone/book/ID SVG icons)
-- Attendance summary: present, absent, late, total sessions
-- Current attendance streak display
-- Complete attendance history with notes
-- Quick edit access
+### Classes
+- **Create/Edit Class** — Name, code, and optional description
+- **Class Detail View** — Two-column interface showing assigned and unassigned students
+- **Assign Students** — One-click assign/unassign students to a class
+- **Smart Icons** — Class icons auto-select based on class name (math, science, art, code, music, language, business, health, law, etc.)
+- Attendance page can filter roster by class
 
-### Attendance Recording
-- Date selector with class filter
-- Present/Absent/Late status toggles
-- **Per-student notes** — Add notes for each attendance entry
-- Bulk actions: Mark All Present / Mark All Absent
-- Load and edit previously saved attendance
+### Take Attendance
+- Select class (or "All Students") and date
+- Mark each student as Present, Absent, or Late
+- Add per-student notes
+- Bulk actions: "Mark All Present" / "Mark All Absent"
+- Load previously saved attendance for a date
+- Saves and overwrites attendance for the selected date
 
-### Calendar View
-- Monthly heatmap grid with color-coded daily rates
-- Green (>=75%), amber (50-74%), red (<50%), gray (no data)
-- Hover for date and rate details
-
-### Reports
-- Filter by student and/or date range
-- Summary cards with SVG icons
-- Per-student breakdown (clickable rows)
-- Detailed attendance log with notes
-- Export to CSV / Print
+### Calendar
+- Monthly heatmap view showing daily attendance rates
+- Color-coded: green (>=75%), amber (50-74%), red (<50%), gray (no data)
+- Hover for exact date and percentage
 
 ### Analytics
-- 14-day attendance trend bar chart (SVG)
+- 14-day attendance trend bar chart
 - Overall distribution donut chart
-- Quick stats panel with key metrics
-- Course-level attendance breakdown
+- Quick stats panel (sessions, students, present/absent/late counts, at-risk count, class count)
+- Course-level breakdown table with per-course attendance rates
 
 ### At-Risk Students
-- Auto-identifies students below 75% attendance
-- Sorted by lowest rate, with student photos
-- Alert banner with warning icon
-- Sidebar badge with live count
+- Lists all students below 75% attendance (sorted by lowest rate)
+- Alert banner with count
+- Click any student to view their full profile
 
-### Class Management
-- Create classes with name, code, description
-- Edit/delete classes (students unassigned, not deleted)
-- Class cards with building icon and student count
-- Assign students to classes
+### Reports
+- Filter by student, date range (from/to)
+- Summary stats (total, present, absent, late)
+- Per-student breakdown table
+- Full attendance log with dates, statuses, and notes
+- Export filtered results to CSV
+- Print support
+
+### Profile
+- View and edit lecturer name, email, phone, and photo
+- Requires current password confirmation to save changes
 
 ### Settings
-- Dark / light theme toggle (sun/moon SVG icons)
-- Export/import JSON backup
-- Clear all data with confirmation
-- System info
-
-### Dark Mode
-- Full dark theme with dedicated color palette
-- Toggle via top bar icon or settings
-- Smooth transitions
-
----
-
-## Technology Stack
-
-| Component     | Technology         |
-|---------------|--------------------|
-| Structure     | HTML5              |
-| Styling       | CSS3 (custom, no frameworks) |
-| Logic         | Vanilla JavaScript (no libraries) |
-| Icons         | Inline SVG (hand-coded, Feather-style) |
-| Charts        | Inline SVG (hand-coded) |
-| Images        | Base64 data URLs (stored in localStorage) |
-| Data Storage  | Browser `localStorage` |
-| Build Tool    | Vite (dev server only) |
-
----
+- **Dark/Light Theme** — Toggle between themes
+- **Change Password** — Requires current password verification
+- **Export Data** — Download full JSON backup (students, attendance, classes, accounts, lecturer)
+- **Import Data** — Restore from JSON backup (replaces current data)
+- **Clear All Data** — Permanently delete everything (with confirmation)
 
 ## Project Structure
 
 ```
 project/
-├── index.html        # HTML entry point
-├── style.css         # All styles (including dark mode + SVG icon styles)
-├── main.js           # All logic + SVG icon library
-├── package.json      # Vite dev server configuration
-└── README.md         # This documentation
+├── index.html              # HTML entry point
+├── package.json            # Project metadata and scripts
+├── style.css               # All styles (design tokens, components, responsive)
+├── README.md               # This file
+└── src/
+    ├── main.js             # Entry point — render loop, view routing
+    ├── icons.js            # SVG icon library, logo, classIconFor()
+    ├── utils.js            # Helpers: uid, dates, toast, escaping, image upload
+    ├── state.js            # App state, localStorage persistence, theme management
+    ├── nav.js              # Shared render()/setView() bridge (avoids circular imports)
+    ├── auth.js             # Authentication: register, login, reset, hash, updateLecturer
+    ├── data.js             # CRUD: students, classes, attendance + export/import + uniqueness
+    ├── charts.js           # SVG donut chart, bar chart, trend chart
+    ├── views-auth.js       # Login, Register, Forgot Password screens
+    ├── views-layout.js     # Sidebar, topbar, shared UI helpers (statCard, avatar, emptyState)
+    ├── views-dashboard.js  # Dashboard view
+    ├── views-students.js   # Students list, profile, add/edit modal
+    ├── views-attendance.js # Take Attendance view
+    ├── views-classes.js    # Classes list, class detail with assignment, class modal
+    ├── views-analytics.js  # Analytics, Calendar, At-Risk views
+    ├── views-reports.js    # Reports view with filters and CSV export
+    └── views-profile.js    # Profile editor and Settings view
 ```
 
----
+## Architecture
 
-## Getting Started
+### Module System
+The app uses ES6 modules (`import`/`export`) bundled by Vite. Each file has a single responsibility:
 
-The dev server starts automatically. If running locally:
+| Layer | Files | Purpose |
+|-------|-------|---------|
+| **Foundation** | `icons.js`, `utils.js`, `state.js`, `nav.js` | Shared utilities, state, navigation bridge |
+| **Logic** | `auth.js`, `data.js`, `charts.js` | Business logic and data operations |
+| **Views** | `views-*.js` | DOM rendering for each screen |
+| **Entry** | `main.js` | Wires everything together, runs render loop |
 
-```bash
-npm install
-npm run dev
+### State Management
+All state lives in a single `state` object exported from `state.js`. The `persist()` function writes to localStorage. Views read from `state` directly and call `render()` (via `nav.js`) to re-render after changes.
+
+### Render Loop
+`main.js` owns the `render()` function and registers it with `nav.js` via `setRender()`. Any module can trigger a re-render by calling `render()` or `setView()` from `nav.js` without importing `main.js` directly — this avoids circular dependency issues.
+
+### Data Model
+
+**Student**
+```
+{ id, name, matric (index number), course, level, email, phone, photo, classId, createdAt }
 ```
 
-### Building for Production
-
-```bash
-npm run build
+**Class**
+```
+{ id, name, code, description, createdAt }
 ```
 
----
-
-## Usage Guide
-
-### 1. Login
-Enter any email + password (min 4 chars). Session persists until sign out.
-
-### 2. Set Up Lecturer Profile
-Click user info in sidebar or go to **My Profile**. Upload a photo, edit name/email/phone. Save.
-
-### 3. Create Classes
-Go to **Classes**. Click **Create Class**. Enter name, code, description.
-
-### 4. Register Students
-Go to **Students**. Click **Add Student**. Fill in details, upload photo, assign class. Search and click rows for profiles.
-
-### 5. Take Attendance
-Go to **Take Attendance**. Filter by class, select date, set statuses, add notes. Save.
-
-### 6. View Calendar
-Go to **Calendar** for monthly heatmap of daily attendance rates.
-
-### 7. Generate Reports
-Go to **Reports**. Filter, generate, export CSV or print.
-
-### 8. View Analytics
-Go to **Analytics** for trend chart, distribution donut, course breakdown.
-
-### 9. Monitor At-Risk Students
-Go to **At-Risk Students** for students below 75%. Click rows for profiles.
-
-### 10. Settings
-Toggle dark mode, export/import data, clear all data.
-
----
-
-## Data Model
-
-### Lecturer
-| Field   | Type   | Description              |
-|---------|--------|--------------------------|
-| name    | String | Full name                |
-| email   | String | Email address            |
-| phone   | String | Phone (optional)         |
-| photo   | String | Base64 photo (optional)  |
-
-### Student Record
-| Field     | Type   | Description                     |
-|-----------|--------|---------------------------------|
-| id        | String | Auto-generated (STU-xxx)        |
-| name      | String | Full name                       |
-| matric    | String | Matriculation number            |
-| course    | String | Course of study                 |
-| level     | String | Academic level (100-500)        |
-| email     | String | Email (optional)                |
-| phone     | String | Phone (optional)                |
-| photo     | String | Base64 photo (optional)         |
-| classId   | String | Reference to class (optional)    |
-| createdAt | String | ISO timestamp                   |
-
-### Attendance Record
-| Field       | Type   | Description                    |
-|-------------|--------|--------------------------------|
-| id          | String | Auto-generated (ATT-xxx)       |
-| studentId   | String | Reference to student            |
-| date        | String | ISO date (YYYY-MM-DD)           |
-| status      | String | "present", "absent", or "late"  |
-| note        | String | Per-student note                |
-| recordedAt  | String | ISO timestamp                   |
-
-### Class Record
-| Field       | Type   | Description              |
-|-------------|--------|--------------------------|
-| id          | String | Auto-generated (CLS-xxx)  |
-| name        | String | Class name               |
-| code        | String | Class code               |
-| description | String | Description (optional)   |
-| createdAt   | String | ISO timestamp            |
-
-### Storage Keys
-| Key              | Data                        |
-|------------------|-----------------------------|
-| sams_students    | Array of student records    |
-| sams_attendance  | Array of attendance records |
-| sams_session     | Current login session       |
-| sams_lecturer    | Lecturer profile + photo    |
-| sams_theme       | Theme preference            |
-| sams_classes     | Array of class records      |
-
----
-
-## System Design
-
-### Architecture
-SPA pattern: `User Action → Event → State Update → localStorage → Re-render`
-
-### SVG Icon System
-All icons are defined as inline SVG strings in a central `SVG` object. They use `stroke: currentColor` to inherit color from their parent element, making them theme-aware automatically. No icon fonts, no emoji, no external image files.
-
-### Charts
-Hand-coded inline SVG: donut (stroke-dasharray segments), bar chart (rect elements), calendar heatmap (CSS grid + colors).
-
-### Image Handling
-Photos converted to base64 via `FileReader`, stored in localStorage. Limited to 500KB.
-
-### Attendance Rate
+**Attendance Record**
 ```
-rate = ((present + late * 0.5) / total) * 100
+{ id, studentId, date (ISO), status ("present"|"absent"|"late"), note, recordedAt }
 ```
-- >=75% green, 50-74% amber, <50% red
-- At-risk: below 75% with at least 1 session
 
-### Streak
-Consecutive present/late days counting back from most recent record. 3+ days shows flame badge.
+**Account**
+```
+{ id, name, email, passwordHash, phone, photo, createdAt }
+```
 
----
+### Index Number Uniqueness
+When adding or editing a student, the system checks if the index number already exists (case-insensitive). The `isIndexNumberUnique()` function in `data.js` excludes the student being edited from the check, so you can save other fields without changing the index number.
 
-## Limitations
+### Class Student Assignment
+Students are assigned to classes via the `classId` field on the student object. The class detail view shows two lists — assigned and unassigned — with one-click assign/remove buttons. The attendance page can filter the roster by class.
 
-- **Browser storage only** — Use JSON export for backups
-- **Client-side auth** — Demo gate, not real security
-- **Single-tenant** — No multi-lecturer support
-- **Image size** — 500KB limit per photo due to localStorage capacity
-- **No external dependencies** — Everything runs in-browser
+## Technologies
+- **HTML5** — Single entry point (`index.html`)
+- **CSS3** — Custom design system with CSS variables, dark mode, responsive breakpoints
+- **JavaScript (ES6)** — Vanilla JS with module imports, no frameworks
+- **Vite** — Build tool and dev server
+- **localStorage** — Client-side data persistence
+- **SVG** — All icons and charts are hand-crafted inline SVG (no icon libraries)
+- **Inter** — Google Font for typography
+- **Pexels** — Stock photos for empty states and auth background
 
----
+## Design System
 
-## Future Enhancements
+### Color Palette
+| Token | Light | Dark |
+|-------|-------|------|
+| Primary | `#0284c7` (sky blue) | same |
+| Accent | `#6366f1` (indigo) | same |
+| Success | `#16a34a` (green) | same |
+| Warning | `#f59e0b` (amber) | same |
+| Danger | `#dc2626` (red) | same |
+| Background | `#f8fafc` | `#0f172a` |
+| Surface | `#ffffff` | `#1e293b` |
+| Sidebar | `#0f172a` | `#020617` |
 
-- Real authentication with backend
-- Cloud database for cross-device access
-- Biometric/RFID attendance
-- Email/SMS notifications
-- Multi-lecturer with role-based access
-- Excel export
-- Attendance predictions
-- Parent/guardian portal
+### Typography
+- Font: Inter (400, 500, 600, 700, 800)
+- Body line-height: 1.5
+- Headings: 800 weight
+
+### Spacing
+- 8px base unit
+- Border radius: 8px (small), 12px (default), 16px (large)
+
+### Breakpoints
+- Desktop: default
+- Tablet: `max-width: 900px` (two-col collapses)
+- Mobile: `max-width: 768px` (sidebar drawer, stacked layouts)
+- Small mobile: `max-width: 480px` (single column)
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start Vite dev server |
+| `npm run build` | Build for production (outputs to `dist/`) |
+| `npm run preview` | Preview production build |
+
+## Browser Support
+Works in all modern browsers with ES6 module support (Chrome, Firefox, Safari, Edge). Data is stored per-browser via localStorage — clearing browser data will erase all records. Use the Export/Import feature in Settings to back up or transfer data.
