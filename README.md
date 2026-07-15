@@ -1,6 +1,6 @@
 # AttendMS — Student Attendance Management System
 
-A web-based attendance management system designed for lecturers to track student attendance, manage classes, and generate reports. Built with pure HTML, CSS, and JavaScript using a modular ES6 architecture. Data persists locally in the browser via localStorage.
+A web-based attendance management system for lecturers to track student attendance, manage classes, and generate reports. Built with **separate HTML pages**, **split CSS files**, and **modular JavaScript** — not a single-page app. Each page has its own HTML file with real markup; JS only handles the dynamic/interactive parts.
 
 ## Features
 
@@ -16,7 +16,7 @@ A web-based attendance management system designed for lecturers to track student
 - Overview stats: total students, present/absent today, overall attendance rate
 - Today's attendance snapshot with progress bar
 - Overall attendance distribution donut chart (present/absent/late)
-- At-risk student alert banner (links to At-Risk view)
+- At-risk student alert banner (links to At-Risk page)
 - Recent students table (last 5 added)
 
 ### Students
@@ -82,47 +82,84 @@ A web-based attendance management system designed for lecturers to track student
 
 ```
 project/
-├── index.html              # HTML entry point
-├── package.json            # Project metadata and scripts
-├── style.css               # All styles (design tokens, components, responsive)
-├── README.md               # This file
-└── src/
-    ├── main.js             # Entry point — render loop, view routing
-    ├── icons.js            # SVG icon library, logo, classIconFor()
-    ├── utils.js            # Helpers: uid, dates, toast, escaping, image upload
-    ├── state.js            # App state, localStorage persistence, theme management
-    ├── nav.js              # Shared render()/setView() bridge (avoids circular imports)
-    ├── auth.js             # Authentication: register, login, reset, hash, updateLecturer
-    ├── data.js             # CRUD: students, classes, attendance + export/import + uniqueness
-    ├── charts.js           # SVG donut chart, bar chart, trend chart
-    ├── views-auth.js       # Login, Register, Forgot Password screens
-    ├── views-layout.js     # Sidebar, topbar, shared UI helpers (statCard, avatar, emptyState)
-    ├── views-dashboard.js  # Dashboard view
-    ├── views-students.js   # Students list, profile, add/edit modal
-    ├── views-attendance.js # Take Attendance view
-    ├── views-classes.js    # Classes list, class detail with assignment, class modal
-    ├── views-analytics.js  # Analytics, Calendar, At-Risk views
-    ├── views-reports.js    # Reports view with filters and CSV export
-    └── views-profile.js    # Profile editor and Settings view
+├── index.html                  # Redirects to login.html
+├── login.html                  # Login page (HTML + form markup)
+├── register.html               # Register page (HTML + form markup)
+├── forgot-password.html        # Forgot password page (HTML + form markup)
+├── dashboard.html              # Dashboard page (loads layout + content via JS)
+├── students.html               # Students list / profile page
+├── attendance.html             # Take attendance page
+├── classes.html                # Classes list / class detail page
+├── analytics.html              # Analytics page
+├── calendar.html               # Calendar heatmap page
+├── atrisk.html                 # At-risk students page
+├── reports.html                # Reports page
+├── profile.html                # Profile editor page
+├── settings.html               # Settings page
+├── package.json                # Project metadata and scripts
+├── vite.config.js             # Vite config (multi-page input)
+├── README.md                   # This file
+│
+├── css/
+│   ├── base.css                # Design tokens, reset, utilities
+│   ├── layout.css              # Sidebar, topbar, auth screen, responsive layout
+│   ├── components.css          # Buttons, forms, tables, badges, modals, panels, stats
+│   └── views.css               # Attendance, charts, calendar, class cards, profile
+│
+└── js/
+    ├── icons.js                # SVG icon strings, logo, classIconFor()
+    ├── utils.js                # Helpers: uid, dates, toast, escaping, image upload
+    ├── state.js                # App state, localStorage persistence, theme
+    ├── auth.js                 # Auth: register, login, reset, hash, requireAuth
+    ├── data.js                 # CRUD: students, classes, attendance + export/import
+    ├── charts.js               # SVG donut chart, bar chart, trend chart
+    ├── layout.js               # Injects sidebar/topbar, navigation, auth guard
+    └── pages/
+        ├── login.js            # Login form handler
+        ├── register.js         # Register form handler + password strength
+        ├── forgot-password.js  # Reset password form handler
+        ├── dashboard.js        # Dashboard content rendering
+        ├── students.js         # Students list, profile, add/edit modal
+        ├── attendance.js       # Attendance taking logic
+        ├── classes.js          # Classes list, detail, assignment, modal
+        ├── analytics.js        # Analytics charts and stats
+        ├── calendar.js         # Calendar heatmap rendering
+        ├── atrisk.js           # At-risk students table
+        ├── reports.js           # Reports with filters and CSV export
+        ├── profile.js          # Profile editor form handler
+        └── settings.js         # Settings: theme, password, data management
 ```
 
 ## Architecture
 
-### Module System
-The app uses ES6 modules (`import`/`export`) bundled by Vite. Each file has a single responsibility:
+### Multi-Page App (not SPA)
+Each screen is a **separate HTML file** with its own URL. Navigation between pages uses standard `window.location.href` redirects — no client-side router. This means:
+
+- **Auth pages** (`login.html`, `register.html`, `forgot-password.html`) have real HTML forms and structure in the markup. JS only handles form submission and validation.
+- **App pages** (`dashboard.html`, `students.html`, etc.) load a shared layout (sidebar + topbar) via `js/layout.js`, then fill the `#view-container` with page-specific content.
+- **URL parameters** carry state between pages (e.g., `/students.html?id=STU-abc` opens a student profile).
+
+### File Organization
 
 | Layer | Files | Purpose |
 |-------|-------|---------|
-| **Foundation** | `icons.js`, `utils.js`, `state.js`, `nav.js` | Shared utilities, state, navigation bridge |
-| **Logic** | `auth.js`, `data.js`, `charts.js` | Business logic and data operations |
-| **Views** | `views-*.js` | DOM rendering for each screen |
-| **Entry** | `main.js` | Wires everything together, runs render loop |
+| **HTML** | `*.html` (14 pages) | Page structure, form markup, CSS/JS imports |
+| **CSS** | `css/*.css` (4 files) | Design tokens, layout, components, view-specific styles |
+| **Shared JS** | `js/*.js` (7 files) | State, auth, data, charts, icons, utils, layout |
+| **Page JS** | `js/pages/*.js` (14 files) | One per HTML page — handles that page's logic |
+
+### CSS Split
+CSS is organized by concern, not by page:
+- **`base.css`** — Design tokens (CSS variables), reset, utility classes
+- **`layout.css`** — Sidebar, topbar, auth screen, responsive breakpoints
+- **`components.css`** — Buttons, forms, tables, badges, modals, panels, stats, alerts
+- **`views.css`** — Attendance rows, charts, calendar, class cards, profile
+
+### Auth Guard
+Every app page calls `initPage()` from `layout.js`, which checks `requireAuth()`. If not logged in, the user is redirected to `login.html`. Auth pages check `isLoggedIn()` and redirect to `dashboard.html` if already authenticated.
 
 ### State Management
-All state lives in a single `state` object exported from `state.js`. The `persist()` function writes to localStorage. Views read from `state` directly and call `render()` (via `nav.js`) to re-render after changes.
-
-### Render Loop
-`main.js` owns the `render()` function and registers it with `nav.js` via `setRender()`. Any module can trigger a re-render by calling `render()` or `setView()` from `nav.js` without importing `main.js` directly — this avoids circular dependency issues.
+All state lives in a single `state` object in `js/state.js`. The `persist()` function writes to localStorage. Since each page is a separate HTML file, state is reloaded from localStorage on every page load — no in-memory state carries over.
 
 ### Data Model
 
@@ -146,17 +183,11 @@ All state lives in a single `state` object exported from `state.js`. The `persis
 { id, name, email, passwordHash, phone, photo, createdAt }
 ```
 
-### Index Number Uniqueness
-When adding or editing a student, the system checks if the index number already exists (case-insensitive). The `isIndexNumberUnique()` function in `data.js` excludes the student being edited from the check, so you can save other fields without changing the index number.
-
-### Class Student Assignment
-Students are assigned to classes via the `classId` field on the student object. The class detail view shows two lists — assigned and unassigned — with one-click assign/remove buttons. The attendance page can filter the roster by class.
-
 ## Technologies
-- **HTML5** — Single entry point (`index.html`)
-- **CSS3** — Custom design system with CSS variables, dark mode, responsive breakpoints
+- **HTML5** — 14 separate page files with real markup
+- **CSS3** — 4 stylesheet files, custom design system with CSS variables, dark mode, responsive
 - **JavaScript (ES6)** — Vanilla JS with module imports, no frameworks
-- **Vite** — Build tool and dev server
+- **Vite** — Build tool with multi-page input configuration
 - **localStorage** — Client-side data persistence
 - **SVG** — All icons and charts are hand-crafted inline SVG (no icon libraries)
 - **Inter** — Google Font for typography
@@ -196,7 +227,7 @@ Students are assigned to classes via the `classId` field on the student object. 
 | Command | Description |
 |---------|-------------|
 | `npm run dev` | Start Vite dev server |
-| `npm run build` | Build for production (outputs to `dist/`) |
+| `npm run build` | Build all 14 pages for production (outputs to `dist/`) |
 | `npm run preview` | Preview production build |
 
 ## Browser Support
